@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Рулетка казино</title>
+<style>
+  body { background: black; color: white; font-family: sans-serif; text-align: center; }
+  .toggle { margin: 20px; }
+  .slots { display: flex; justify-content: center; margin: 40px; }
+  .slot { font-size: 50px; width: 80px; height: 80px; margin: 0 10px; display: flex; justify-content: center; align-items: center; background: #111; border-radius: 10px; }
+  button { background: #007BFF; color: white; font-size: 20px; padding: 10px 20px; border: none; border-radius: 10px; cursor: pointer; }
+  button:active { background: #0056b3; }
+</style>
+</head>
+<body>
+
+<h1>🎰 Рулетка Казино</h1>
+<div class="toggle">
+  <label>Демо режим
+    <input type="checkbox" id="demoToggle" checked>
+  </label>
+</div>
+
+<div class="slots">
+  <div class="slot" id="slot1">🧸</div>
+  <div class="slot" id="slot2">🥂</div>
+  <div class="slot" id="slot3">🎁</div>
+</div>
+
+<button id="spinBtn">Крутить 🎰</button>
+
+<script>
+const slotEmojis = ["🧸", "🥂", "🎁", "🍀", "💎"];
+const demoToggle = document.getElementById('demoToggle');
+const spinBtn = document.getElementById('spinBtn');
+const slots = [document.getElementById('slot1'), document.getElementById('slot2'), document.getElementById('slot3')];
+
+spinBtn.addEventListener('click', () => {
+    if(!demoToggle.checked){
+        // здесь можно вызвать Telegram Payment через Web App
+        alert("Реальный режим: спишем 24 звезды и крутим слоты после оплаты!");
+        // TODO: интегрировать Web App Telegram платеж
+    } else {
+        // демо режим просто крутим
+        slots.forEach(slot => {
+            let i = 0;
+            let interval = setInterval(() => {
+                slot.textContent = slotEmojis[Math.floor(Math.random() * slotEmojis.length)];
+                i++;
+                if(i>15) clearInterval(interval);
+            }, 100);
+        });
+    }
+});
+</script>
+
+</body>
+</html>
