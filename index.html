@@ -66,19 +66,17 @@ const slot3 = document.getElementById("slot3");
 const spinBtn = document.getElementById("spin");
 const demoCheckbox = document.getElementById("demo");
 
-// Функция случайного слота
+// случайный слот
 function randomSlot() { return SLOTS[Math.floor(Math.random()*SLOTS.length)]; }
 
-// Анимация слотов с замедлением
+// анимация слотов с замедлением
 function spinSlotsAnimation(callback) {
-    let steps = 30;
-    let current = 0;
+    let steps = 30, current = 0;
     let interval = setInterval(() => {
         slot1.textContent = randomSlot();
         slot2.textContent = randomSlot();
         slot3.textContent = randomSlot();
         current++;
-        // замедление
         if(current > steps) {
             clearInterval(interval);
             if(callback) callback();
@@ -87,21 +85,21 @@ function spinSlotsAnimation(callback) {
 }
 
 spinBtn.onclick = () => {
-    // Демо режим
     if(demoCheckbox.checked){
         spinSlotsAnimation();
     } else {
         if(window.Telegram && window.Telegram.WebApp){
             spinSlotsAnimation(() => {
-                // Отправляем запрос боту
                 window.Telegram.WebApp.sendData("pay_spin");
             });
         } else {
-            console.error("⚠ Откройте сайт через Telegram WebApp!");
+            window.Telegram.WebApp.sendData("pay_spin");
+            console.error("⚠ Мини-приложение открыто не через Telegram!");
         }
     }
 };
 </script>
 </body>
 </html>
+
 
