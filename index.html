@@ -17,20 +17,8 @@ body {
     height: 100vh;
     overflow: hidden;
 }
-
-#demoSwitch {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    font-size: 16px;
-}
-
-#slots {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 50px;
-}
-
+#demoSwitch { position: absolute; top: 20px; right: 20px; font-size: 16px; }
+#slots { display: flex; gap: 20px; margin-bottom: 50px; }
 .slot {
     width: 80px;
     height: 80px;
@@ -42,8 +30,8 @@ body {
     border-radius: 15px;
     box-shadow: 0 0 20px rgba(0,255,255,0.5);
     border: 2px solid #4facfe;
+    transition: transform 0.2s;
 }
-
 button {
     padding: 15px 35px;
     font-size: 22px;
@@ -54,15 +42,8 @@ button {
     cursor: pointer;
     transition: transform 0.1s, box-shadow 0.2s;
 }
-
-button:hover {
-    box-shadow: 0 0 20px #4facfe;
-}
-
-button:active {
-    transform: scale(0.95);
-}
-
+button:hover { box-shadow: 0 0 20px #4facfe; }
+button:active { transform: scale(0.95); }
 </style>
 </head>
 <body>
@@ -85,45 +66,42 @@ const slot3 = document.getElementById("slot3");
 const spinBtn = document.getElementById("spin");
 const demoCheckbox = document.getElementById("demo");
 
-function randomSlot() {
-    return SLOTS[Math.floor(Math.random() * SLOTS.length)];
-}
+// Функция случайного слота
+function randomSlot() { return SLOTS[Math.floor(Math.random()*SLOTS.length)]; }
 
-// Анимация кручения слотов с замедлением
+// Анимация слотов с замедлением
 function spinSlotsAnimation(callback) {
-    const steps = 30; // количество кадров анимации
-    let currentStep = 0;
+    let steps = 30;
+    let current = 0;
     let interval = setInterval(() => {
         slot1.textContent = randomSlot();
         slot2.textContent = randomSlot();
         slot3.textContent = randomSlot();
-
+        current++;
         // замедление
-        currentStep++;
-        if(currentStep >= steps) {
+        if(current > steps) {
             clearInterval(interval);
             if(callback) callback();
         }
-    }, 50 + currentStep*2); // увеличение интервала для эффекта замедления
+    }, 50 + current*2);
 }
 
 spinBtn.onclick = () => {
+    // Демо режим
     if(demoCheckbox.checked){
         spinSlotsAnimation();
     } else {
-        // Реальный режим - отправка данных боту через WebApp
         if(window.Telegram && window.Telegram.WebApp){
             spinSlotsAnimation(() => {
-                // Отправляем событие боту после окончания анимации
+                // Отправляем запрос боту
                 window.Telegram.WebApp.sendData("pay_spin");
             });
         } else {
-            alert("⚠ Откройте этот сайт через Telegram WebApp!");
+            console.error("⚠ Откройте сайт через Telegram WebApp!");
         }
     }
 };
 </script>
-
 </body>
 </html>
 
